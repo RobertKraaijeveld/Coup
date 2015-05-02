@@ -91,6 +91,11 @@ namespace COUP___The_Revolution_1._1
             public abstract void Action();
         }
 
+        public abstract class DeckInteractionCard : Card
+        {
+            public abstract void Action(Player player, Deck deck);
+        }
+
         public abstract class MoneyCard : Card
         {
             public abstract void Action(Player player, ChipStack chipStack);
@@ -111,17 +116,9 @@ namespace COUP___The_Revolution_1._1
         {
             public override void Action(Player player, ChipStack chipStack)
             {
-
-                if (player.PlayerHand.HandContent.Contains(this))
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        player.TakeChip(chipStack);
-                    }
-                }
-                else
-                {
-                    //display error: you do not have that card!
+                    player.TakeChip(chipStack);
                 }
             }
 
@@ -134,19 +131,13 @@ namespace COUP___The_Revolution_1._1
 
         class Captain : TargetCard
         {
+            //this card gives passive protection: how do we do this
             public override void Action(Player player, Player targetPlayer)
             {
-                if (player.PlayerHand.HandContent.Contains(this))
-                {
-                    if (targetPlayer.PlayerChips.Count >= 1)
-                    {
-                        targetPlayer.GiveChip(2, targetPlayer);
-                    }
-                }
-                else
-                {
-                    //display error: you do not have that card!
-                }
+               if (targetPlayer.PlayerChips.Count >= 2)
+               {
+                    targetPlayer.GiveChip(2, player);
+               }
             }
 
             public override string ToString()
@@ -166,8 +157,18 @@ namespace COUP___The_Revolution_1._1
         }
 
 
-        class Ambassador : Card
+        class Ambassador : DeckInteractionCard
         {
+            //this card gives passive protection: how do we do this
+            public override void Action(Player player, Deck deck)
+            {
+                //open dialog: which 2 cards would you like to keep?
+                //(now, this action just doubles the players hand)
+                for (int i = 0; i < 2; i++)
+                {
+                    player.PlayerHand.HandContent.Add(deck.DrawCard());
+                }
+            }
             public override string ToString()
             {
                 return "Ambassador";
@@ -179,7 +180,7 @@ namespace COUP___The_Revolution_1._1
         {
             public override void Action(Player player, Player targetPlayer)
             {
-                if (player.PlayerHand.HandContent.Contains(this) && player.PlayerChips.Count >= 3)
+                if (player.PlayerChips.Count >= 3 && targetPlayer.FoldedAllCards == false)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -192,15 +193,6 @@ namespace COUP___The_Revolution_1._1
             public override string ToString()
             {
                 return "Assassin";
-            }
-        }
-
-
-        class Inquisitor : Card
-        {
-            public override string ToString()
-            {
-                return "Inquisitor";
             }
         }
 
