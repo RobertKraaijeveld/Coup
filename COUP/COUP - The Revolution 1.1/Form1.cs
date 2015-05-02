@@ -83,11 +83,22 @@ namespace COUP___The_Revolution_1._1
             }
         }
 
-        public interface Card
+        public abstract class Card
+        { }
+
+        public abstract class PassiveCard : Card
         {
-            void Action();
-            void Action(Player player, ChipStack chipStack);
-            void Action(Player player, Player targetPlayer);
+            public abstract void Action();
+        }
+
+        public abstract class MoneyCard : Card
+        {
+            public abstract void Action(Player player, ChipStack chipStack);
+        }
+
+        public abstract class TargetCard : Card
+        {
+            public abstract void Action(Player player, Player targetPlayer);
         }
 
         /* --------------------
@@ -96,9 +107,9 @@ namespace COUP___The_Revolution_1._1
         * TO DO: ADD PROTECTION
         */
 
-        class Duke : Card
+        class Duke : MoneyCard
         {
-            public virtual void Action(Player player, ChipStack chipStack)
+            public override void Action(Player player, ChipStack chipStack)
             {
 
                 if (player.PlayerHand.HandContent.Contains(this))
@@ -121,9 +132,9 @@ namespace COUP___The_Revolution_1._1
         }
 
 
-        class Captain : Card
+        class Captain : TargetCard
         {
-            public void Action(Player player, Player targetPlayer)
+            public override void Action(Player player, Player targetPlayer)
             {
                 if (player.PlayerHand.HandContent.Contains(this))
                 {
@@ -145,7 +156,7 @@ namespace COUP___The_Revolution_1._1
         }
 
 
-        class Contessa : Card
+        class Contessa : PassiveCard
         {
             //this card gives passive protection: how do we do this: Deny assasins the right to kill contessas in their method
             public override string ToString()
@@ -164,9 +175,9 @@ namespace COUP___The_Revolution_1._1
         }
 
 
-        class Assassin : Card
+        class Assassin : TargetCard
         {
-            public void Action(Player player, Player targetPlayer)
+            public override void Action(Player player, Player targetPlayer)
             {
                 if (player.PlayerHand.HandContent.Contains(this) && player.PlayerChips.Count >= 3)
                 {
@@ -200,7 +211,7 @@ namespace COUP___The_Revolution_1._1
         * 
         */
 
-        class Hand
+        public class Hand
         {
             //Gotta display errormessages
             public List<Card> HandContent = new List<Card>();
@@ -232,9 +243,9 @@ namespace COUP___The_Revolution_1._1
          * 
          */
 
-        class Chip {}
+        public class Chip {}
 
-        class ChipStack
+        public class ChipStack
         {
             public List<Chip> ChipStackContent = new List<Chip>();
             private readonly int StackSize = 65;
@@ -274,7 +285,7 @@ namespace COUP___The_Revolution_1._1
          * 
          */
 
-        class Player
+        public class Player
         {
             public List<Chip> PlayerChips = new List<Chip>();
             public Hand PlayerHand = new Hand();
@@ -303,6 +314,10 @@ namespace COUP___The_Revolution_1._1
                 if (this.FoldedAllCards == false && targetPlayer.FoldedAllCards == false && this.PlayerChips.Count >= 7)
                 {
                     targetPlayer.FoldCard();
+                }
+                else
+                {
+                    //display error: You do not have enough money, the player has already folded
                 }
             }
 

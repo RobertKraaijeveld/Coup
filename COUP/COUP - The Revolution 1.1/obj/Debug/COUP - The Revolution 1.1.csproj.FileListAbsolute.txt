@@ -7,3 +7,9 @@ E:\Hogeschool\COUP - The Revolution\COUP - The Revolution 1.1\COUP - The Revolut
 E:\Hogeschool\COUP - The Revolution\COUP - The Revolution 1.1\COUP - The Revolution 1.1\bin\Debug\COUP - The Revolution 1.1.pdb
 E:\Hogeschool\COUP - The Revolution\COUP - The Revolution 1.1\COUP - The Revolution 1.1\obj\Debug\COUP - The Revolution 1.1.exe
 E:\Hogeschool\COUP - The Revolution\COUP - The Revolution 1.1\COUP - The Revolution 1.1\obj\Debug\COUP - The Revolution 1.1.pdb
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\bin\Debug\COUP - The Revolution 1.1.exe.config
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\obj\Debug\COUP - The Revolution 1.1.exe
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\obj\Debug\COUP - The Revolution 1.1.csprojResolveAssemblyReference.cache
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\obj\Debug\COUP___The_Revolution_1._1.Form1.resources
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\obj\Debug\COUP___The_Revolution_1._1.Properties.Resources.resources
+D:\Hogeschool\COUP - The Revolution\COUP\COUP - The Revolution 1.1\obj\Debug\COUP - The Revolution 1.1.csproj.GenerateResource.Cache
