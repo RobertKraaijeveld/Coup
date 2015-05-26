@@ -12,41 +12,6 @@ using System.Windows.Forms;
 
 namespace COUP___The_Revolution_1._1
 {
-    /*
-    * ---------------------------
-    * MISCELLANEOUS UTILITIES
-    * ---------------------------
-    */
-
-    public static class utilities
-    {
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-        }
-    }
-
-    /*
-     * ---------------
-     * END UTILITIES
-     * --------------
-     */
-    
-    /*
-     * ---------------
-     * START PROGRAM
-     * --------------
-     */ 
-
     public partial class Form1 : Form
     {
         /*
@@ -59,11 +24,6 @@ namespace COUP___The_Revolution_1._1
          *       - ONLINE OF MEERSPELERVERSIE MAKEN
          */
 
-        
-
-        
-        
-
         /* --------------------
         * DECK
         * --------------------
@@ -75,13 +35,19 @@ namespace COUP___The_Revolution_1._1
         {
             public List<Card> DeckContent = new List<Card>();
             private int DeckSize = 15;
+            //Deze int bepaalt hoeveel van elk type card er in het deck zitten
+            private readonly int amountOfEachCard = 3;
             //Een static randomnumbergen zorgt ervoor dat er geen herhalingen voorkomen
             static Random RandomNumberGen = new Random();
 
 
+
             public Deck()
             {
-                Fill();
+                for (int i = 0; i < DeckSize; i++)
+                {
+                    Fill();
+                }
             }
 
             public Card DrawCard()
@@ -93,37 +59,98 @@ namespace COUP___The_Revolution_1._1
 
             public void Fill()
             {
-                int TotalCards = 0;
-                if (TotalCards < DeckSize)
+                int randomNumber = RandomNumberGen.Next(8);
+                switch (randomNumber)
                 {
-                    for (int DukeCount = 0; DukeCount < 3; DukeCount++)
-                    {
+                    case 1:
                         DeckContent.Add(new Duke());
-                    }
-
-                    for (int CaptainCount = 0; CaptainCount < 3; CaptainCount++)
-                    {
+                        break;
+                    case 2:
                         DeckContent.Add(new Captain());
-                    }
-
-                    for (int AssassinCount = 0; AssassinCount < 3; AssassinCount++)
-                    {
-                        DeckContent.Add(new Assassin());
-                    }
-
-                    for (int AmbassadorCount = 0; AmbassadorCount < 3; AmbassadorCount++)
-                    {
+                        break;
+                    case 3:
+                        DeckContent.Add(new Contessa());
+                        break;
+                    case 4:
+                        DeckContent.Add(new Contessa());
+                        break;
+                    case 5:
                         DeckContent.Add(new Ambassador());
-                    }
-
-                    for (int InquisitorCount = 0; InquisitorCount < 3; InquisitorCount++)
-                    {
+                        break;
+                    case 6:
+                        DeckContent.Add(new Assassin());
+                        break;
+                    case 7:
                         DeckContent.Add(new Inquisitor());
-                    }
+                        break;
+                }
+            }
+
+
+            private void RecursiveFill()
+            {
+                if (DeckContent.Count != null && CheckDeck() == false)
+                {
+                    //loop again
+                    Fill();
+                }
+                //else, stop looping
+            }
+
+            private bool CheckDeck()
+            {
+                //We loopen door alle kaarttypes in het deck.
+                //Als het totale aantal kaarten 15 is en er van iedere kaart 3
+                //in het deck zitten, returnen we true.
+
+                int totalCards = 0;
+                int amountOfDukes = 0;
+                foreach(Duke d in DeckContent)
+                {
+                    amountOfDukes++;
+                    totalCards++;
+                }
+
+                int amountOfCaptains = 0;
+                foreach (Captain ca in DeckContent)
+                {
+                    amountOfCaptains++;
+                    totalCards++;
+                }
+
+                int amountOfContessas = 0;
+                foreach (Contessa co in DeckContent)
+                {
+                    amountOfContessas++;
+                    totalCards++;
+                }
+
+                int amountOfAmbassadors = 0;
+                foreach (Ambassador am in DeckContent)
+                {
+                    amountOfAmbassadors++;
+                    totalCards++;
+                }
+
+                int amountOfAssasins = 0;
+                foreach (Assassin ass in DeckContent)
+                {
+                    amountOfAssasins++;
+                    totalCards++;
+                }
+
+                if (amountOfDukes == 3 &&
+                amountOfCaptains == 3 &&
+                amountOfContessas == 3 &&
+                amountOfAmbassadors == 3 &&
+                amountOfAssasins == 3 &&
+                totalCards == amountOfEachCard)
+                {
+                    return true;
                 }
                 else
                 {
-                    utilities.Shuffle(DeckContent);
+                    return false;
                 }
             }
         }
@@ -146,7 +173,9 @@ namespace COUP___The_Revolution_1._1
          
         public interface Card
         {
-            void Action(Player player, Player targetPlayer, ChipStack chipStack);
+            void Action();
+            void Action(Player player, ChipStack chipStack);
+            void Action(Player player, Player targetPlayer);
         }
 
         /*
@@ -164,7 +193,7 @@ namespace COUP___The_Revolution_1._1
 
         class Duke : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
+            public void Action(Player player, ChipStack chipStack)
             {
 
                 if (player.PlayerHand.HandContent.Contains(this))
@@ -189,7 +218,7 @@ namespace COUP___The_Revolution_1._1
 
         class Captain : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
+            public void Action(Player player, Player targetPlayer)
             {
                 if (player.PlayerHand.HandContent.Contains(this))
                 {
@@ -210,13 +239,9 @@ namespace COUP___The_Revolution_1._1
             }
         }
 
-        
+
         class Contessa : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
-            {
-            }
-
             //this card gives passive protection: how do we do this: Deny assasins the right to kill contessas in their method
             public override string ToString()
             {
@@ -227,20 +252,16 @@ namespace COUP___The_Revolution_1._1
 
         class Ambassador : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
-            {
-            }
-
             public override string ToString()
             {
                 return "Ambassador";
             }
         }
-        
+
 
         class Assassin : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
+            public void Action(Player player, Player targetPlayer)
             {
                 if (player.PlayerHand.HandContent.Contains(this) && player.PlayerChips.Count >= 3)
                 {
@@ -258,18 +279,15 @@ namespace COUP___The_Revolution_1._1
             }
         }
 
+
         class Inquisitor : Card
         {
-            public void Action(Player player, Player targetPlayer, ChipStack chipStack)
-            {
-             
-            }
-
             public override string ToString()
             {
                 return "Inquisitor";
             }
         }
+
 
         /* ------------------------
         * END CLASSES FOR CARDTYPES
@@ -284,8 +302,9 @@ namespace COUP___The_Revolution_1._1
         * 
         */
 
-        public class Hand
+        class Hand
         {
+            //Gotta display errormessages
             public List<Card> HandContent = new List<Card>();
             private readonly int HandSize = 2;
 
@@ -315,9 +334,9 @@ namespace COUP___The_Revolution_1._1
          * 
          */
 
-        public class Chip {}
+        class Chip {}
 
-        public class ChipStack
+        class ChipStack
         {
             public List<Chip> ChipStackContent = new List<Chip>();
             private readonly int StackSize = 65;
@@ -357,17 +376,13 @@ namespace COUP___The_Revolution_1._1
          * 
          */
 
-        public class Player
+        class Player
         {
-            //Wordt later in de GUI bepaald
-            public String Name;
-
-            public Game gameSession;
             public List<Chip> PlayerChips = new List<Chip>();
             public Hand PlayerHand = new Hand();
             public bool FoldedAllCards = false;
 
-            public Player(Deck deck, String playerName)
+            public Player(Deck deck)
             {
                 PlayerHand = new Hand();
                 PlayerHand.fillHand(deck);
@@ -382,7 +397,7 @@ namespace COUP___The_Revolution_1._1
             public void FoldCard()
             {
                 //make player be able to chose which card to fold
-                PlayerHand.HandContent.RemoveAt(PlayerHand.HandContent.Count - 2);
+                PlayerChips.RemoveAt(PlayerChips.Count - 2);
             }
 
             public void Coup(Player targetPlayer)
@@ -438,10 +453,7 @@ namespace COUP___The_Revolution_1._1
 
             public void CardAction(Card card)
             {
-                //als er een targetplayer is verandert deze methode signature
-                //de speler kan dit aangeven dmv de gui: De knop met "steal" heeft wel een targetplayer,
-                // "Grab 3 coins" natuurlijk niet
-                card.Action(this, this, gameSession.gameChipStack);
+                card.Action();
             }
 
         }
@@ -460,20 +472,13 @@ namespace COUP___The_Revolution_1._1
         * 
         */
 
-        public class Game
+        class Game
         {
-           public List<Player> playerList = new List<Player>();
-           public Deck gameDeck;
-           public ChipStack gameChipStack;
+
+
            public Game(int amountOfPlayers)
            {
-               gameDeck = new Deck();
-               gameChipStack = new ChipStack();
-               for (int i = 0; i < amountOfPlayers; i++)
-               {
-                   playerList.Add(new Player(gameDeck, "test"));
-                        
-               }
+
            }
         }
 
@@ -494,11 +499,9 @@ namespace COUP___The_Revolution_1._1
         public Form1()
         { 
             InitializeComponent();
-            Game myGame = new Game(1);
-            label1.Text += "You are holding a ";
-            label1.Text += myGame.playerList[myGame.playerList.Count - 1].PlayerHand.HandContent[0].ToString();
-            label1.Text += " and a ";
-            label1.Text += myGame.playerList[myGame.playerList.Count - 1].PlayerHand.HandContent[1].ToString();
+            Deck myDeck = new Deck();
+            Player myPlayer = new Player(myDeck);
+            //todo: display labelshit in a method instead of here
         }
  
     }
