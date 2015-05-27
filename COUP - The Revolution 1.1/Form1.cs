@@ -12,34 +12,7 @@ using System.Windows.Forms;
 
 namespace COUP___The_Revolution_1._1
 {
-    /*
-    * ---------------------------
-    * MISCELLANEOUS UTILITIES
-    * ---------------------------
-    */
-
-    public static class utilities
-    {
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            Random rng = new Random();
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-        }
-    }
-
-    /*
-     * ---------------
-     * END UTILITIES
-     * --------------
-     */
+    
 
     /*
      * ---------------
@@ -58,10 +31,6 @@ namespace COUP___The_Revolution_1._1
          *       - TURN-SYSTEEM MAKEN
          *       - ONLINE OF MEERSPELERVERSIE MAKEN
          */
-
-
-
-
 
 
         /* --------------------
@@ -83,6 +52,7 @@ namespace COUP___The_Revolution_1._1
             {
                 Fill();
             }
+
 
             public Card DrawCard()
             {
@@ -193,9 +163,20 @@ namespace COUP___The_Revolution_1._1
             {
                 if (player.PlayerHand.HandContent.Contains(this))
                 {
-                    if (targetPlayer.PlayerChips.Count >= 1)
+                    for (int i = 0; i < targetPlayer.PlayerChips.Count; i++)
                     {
-                        targetPlayer.GiveChip(2, targetPlayer);
+                        if (i > 1 && i < 3)
+                        {
+                            targetPlayer.GiveChip(i, player);
+                        }
+                        else if (i > 3)
+                        {
+                            targetPlayer.GiveChip(3, player);
+                        }
+                        else if (i < 1)
+                        {
+                            //error: no chips to steal
+                        }
                     }
                 }
                 else
@@ -249,6 +230,7 @@ namespace COUP___The_Revolution_1._1
                         player.PlayerChips.RemoveAt(player.PlayerChips.Count - 1);
                     }
                     targetPlayer.FoldCard();
+                    //keuze geven in GUI
                 }
             }
 
@@ -502,5 +484,34 @@ namespace COUP___The_Revolution_1._1
         }
 
     }
+
+    /*
+    * ---------------------------
+    * MISCELLANEOUS UTILITIES
+    * ---------------------------
+    */
+
+    public static class utilities
+    {
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+    }
+
+    /*
+     * ---------------
+     * END UTILITIES
+     * --------------
+     */
 
 }
